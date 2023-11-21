@@ -1,16 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
 
-export type CatDocument = HydratedDocument<Tournament>;
+import { TournamentCategory } from '../constants/enums';
 
-enum TournamentCategory {
-  INDIVUDUAL_MALE,
-  INDIVIDUAL_FEMALE,
-  DOUBLES_MALE,
-  DOUBLES_FEMALE
-}
-
-@Schema()
+@Schema({ versionKey: false })
 export class Tournament {
   @Prop({ required: true })
   name: string;
@@ -24,9 +16,7 @@ export class Tournament {
   @Prop()
   location: string;
 
-  @Prop({
-    required: true
-  })
+  @Prop({ required: true, enum: TournamentCategory })
   category: TournamentCategory;
 
   @Prop({ type: [{ type: String }] })
@@ -36,4 +26,5 @@ export class Tournament {
   isCompleted: boolean;
 }
 
-export const TournamentSchema = SchemaFactory.createForClass(Tournament);
+export const TournamentSchema: SchemaFactory =
+  SchemaFactory.createForClass(Tournament);

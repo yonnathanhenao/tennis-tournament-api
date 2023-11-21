@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+
+import { Tournament, TournamentSchema } from './schemas/tournament.schema';
 import { TournamentController } from './tournament.controller';
 import { TournamentService } from './tournament.service';
-import { Tournament, TournamentSchema } from './schemas/tournament.schema';
 
 @Module({
   imports: [
