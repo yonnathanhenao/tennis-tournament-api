@@ -15,9 +15,19 @@ export class UserService {
     return newUser.save();
   }
 
-  async getAll(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     const users: User[] = await this.userModel.find();
     return users || [];
+  }
+
+  async findOne(id: string): Promise<User | null> {
+    const user: User = await this.userModel.findById(id);
+    return user ?? null;
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const user: User = await this.userModel.findOne({ email });
+    return user ?? null;
   }
 
   async update(id: string, userDto: UserDto): Promise<User> {
