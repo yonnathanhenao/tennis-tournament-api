@@ -9,6 +9,8 @@ import { SignInDto } from './dto/signin.dto';
 type JwtPayload = {
   sub: string;
   email: string;
+  name: string;
+  isAdmin: boolean;
 };
 
 @Injectable()
@@ -28,8 +30,10 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     const payload: JwtPayload = {
-      sub: user.id,
-      email: user.email
+      sub: user._id,
+      email: user.email,
+      name: `${user.name} ${user.lastName}`,
+      isAdmin: user.isAdmin
     };
     return {
       access_token: await this.jwtService.signAsync(payload)

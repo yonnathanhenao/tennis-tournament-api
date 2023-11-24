@@ -20,15 +20,17 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic: boolean = this.validatePublic(context);
     const isAdmin: boolean = this.validateAdmin(context);
-    if (isPublic || isAdmin) {
+    const request: Request = context.switchToHttp().getRequest();
+    const token: string = this.extractTokenFromHeader(request);
+
+    if (isPublic) {
       return true;
     }
 
-    const request: Request = context.switchToHttp().getRequest();
-    const token: string = this.extractTokenFromHeader(request);
-    if (!token) {
+    if (!token && !isAdmin) {
       throw new UnauthorizedException();
     }
+
     try {
       const payload: object = await this.validateToken(token);
       request['user'] = payload;
