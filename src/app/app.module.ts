@@ -11,7 +11,8 @@ import { AuthModule } from 'src/auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.dev.env'
+      envFilePath: '.env.dev',
+      isGlobal: true
     }),
     MongooseModule.forRoot(process.env.MONGODB_URL),
     TournamentModule,

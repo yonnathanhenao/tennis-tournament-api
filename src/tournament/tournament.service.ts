@@ -19,9 +19,14 @@ export class TournamentService {
     return createdTournament.save();
   }
 
-  async getAll(): Promise<Tournament[]> {
+  async findAll(): Promise<Tournament[]> {
     const tournaments: Tournament[] = await this.tournamentModel.find();
     return tournaments || [];
+  }
+
+  async findOne(id: string): Promise<Tournament | null> {
+    const tournament: Tournament = await this.tournamentModel.findById(id);
+    return tournament ?? null;
   }
 
   async update(id: string, tournament: TournamentDto): Promise<Tournament> {

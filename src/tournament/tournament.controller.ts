@@ -13,8 +13,10 @@ import {
 import { TournamentDto } from './dto/tournament.dto';
 import { Tournament } from './schemas/tournament.schema';
 import { TournamentService } from './tournament.service';
+import { Admin } from 'src/user/decorators/roles.decorators';
 
 @Controller('tournament')
+@Admin()
 export class TournamentController {
   constructor(private readonly service: TournamentService) {}
 
@@ -24,9 +26,15 @@ export class TournamentController {
   }
 
   @Get()
-  async getAll(@Res() response): Promise<Tournament[]> {
-    const data: Tournament[] = await this.service.getAll();
+  async findAll(@Res() response): Promise<Tournament[]> {
+    const data: Tournament[] = await this.service.findAll();
     return response.status(HttpStatus.OK).json({ data });
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string, @Res() response): Promise<Tournament> {
+    const data: Tournament = await this.service.findOne(id);
+    return response.status(HttpStatus.OK).json(data);
   }
 
   @Put(':id')
