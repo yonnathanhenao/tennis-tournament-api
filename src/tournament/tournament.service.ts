@@ -30,7 +30,7 @@ export class TournamentService {
   }
 
   async update(id: string, tournament: TournamentDto): Promise<Tournament> {
-    const updatedTournament: Tournament =
+    const updatedTournament: TournamentDocument =
       await this.tournamentModel.findByIdAndUpdate(id, tournament, {
         new: true
       });
@@ -41,7 +41,7 @@ export class TournamentService {
   }
 
   async delete(id: string): Promise<Tournament> {
-    const deletedTournament: Tournament =
+    const deletedTournament: TournamentDocument =
       await this.tournamentModel.findByIdAndDelete(id);
     if (!deletedTournament) {
       throw new NotFoundException(`Tournament ${id} not found`);

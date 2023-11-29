@@ -31,7 +31,7 @@ export class UserService {
   }
 
   async update(id: string, userDto: UserDto): Promise<User> {
-    const updatedUser: User = await this.userModel.findByIdAndUpdate(
+    const updatedUser: UserDocument = await this.userModel.findByIdAndUpdate(
       id,
       userDto,
       { new: true }
@@ -43,7 +43,8 @@ export class UserService {
   }
 
   async delete(id: string): Promise<User> {
-    const deletedUser: User = await this.userModel.findByIdAndDelete(id);
+    const deletedUser: UserDocument =
+      await this.userModel.findByIdAndDelete(id);
     if (!deletedUser) {
       throw new NotFoundException(`User ${id} not found`);
     }
