@@ -8,11 +8,12 @@ import { Request } from 'express';
 
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constants/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
+    private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector
   ) {}
@@ -47,7 +48,7 @@ export class AuthGuard implements CanActivate {
 
   private validateToken(token: string) {
     return this.jwtService.verify(token, {
-      secret: jwtConstants.secret
+      secret: this.configService.get('jwtSecret')
     });
   }
 

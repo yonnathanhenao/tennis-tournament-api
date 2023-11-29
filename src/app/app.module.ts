@@ -1,20 +1,27 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { UserModule } from 'src/user/user.module';
+import { AuthModule } from '../auth/auth.module';
+import { config } from '../config/config';
 import { TournamentModule } from '../tournament/tournament.module';
+import { UserModule } from '../user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.dev',
-      isGlobal: true
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+      isGlobal: true,
+      load: [config]
     }),
-    MongooseModule.forRoot(process.env.MONGODB_URL),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('mongodb.connectionString')
+      })
+    }),
     TournamentModule,
     UserModule,
     AuthModule
